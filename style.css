@@ -1,14 +1,17 @@
 /* Write your CSS Here. */
-*{
+* {
     box-sizing: border-box;
     margin: 0;
 }
-body{
-height: 100vh;
-width: 100vw;
+
+body {
+    height: 100vh;
+    width: 100vw;
+overflow: hidden;
+    /* transition: all 1s ease; */
 }
 
-main{
+main {
     width: 100%;
     height: 100%;
     display: flex;
@@ -17,8 +20,11 @@ main{
     align-items: center;
     letter-spacing: 2px;
     background-color: rgb(139, 74, 74);
+
+    transition: all 1s ease-out;
 }
-header{
+
+header {
     position: fixed;
     display: flex;
     justify-content: space-between;
@@ -33,27 +39,60 @@ header{
     /* background: linear-gradient(90deg, lightgray , rgb(0,0,0)) */
     background-color: rgb(179, 179, 179);
 }
-header img{
+
+header img {
     width: 100px;
     height: 70px;
     object-fit: cover;
 }
-header h2{
+
+header h2 {
     color: darkblue;
 }
-.game-title{
+
+.game-title {
     color: darkblue;
     font-size: 70px;
-    
 }
-.score{
+
+.score {
     color: red;
 }
-.gameBox{
+
+.instruction-container{
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 55vw;
+    transition: all 4s linear;
+}
+.instruction-container h1{
+    font-size: 37px;
+    color: rgb(255, 0, 0);
+    text-shadow: 1px 1px 1px rgb(255, 255, 255);
+    animation: TexttFlashing 300ms ease infinite;
+
+}
+.instruction-container h2{
+    font-size: 34px;
+    color: rgb(255, 255, 255);
+    text-shadow: 1px 1px 1px rgb(255, 0, 0);
+    margin: 20px 0;
+}
+.instruction-container p{
+    font-size: 28px;
+    color: rgb(0, 0, 0);
+    text-shadow: 1px 1px 1px rgb(255, 255, 255);
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+.gameBox {
     width: 50%;
     height: 50%;
     background-color: rgb(253, 199, 193);
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -62,34 +101,36 @@ header h2{
     box-shadow: 2px 4px 8px 1px black;
     margin-top: 80px;
 }
-.question{
+
+.question {
     text-align: center;
     color: rgb(94, 44, 12);
     font-size: 25px;
-    text-shadow: 1px 1px 1px  rgb(0, 0, 0);
+    text-shadow: 1px 1px 1px rgb(0, 0, 0);
 }
 
-input{
-    width: 60%;
+input {
+    width: 75%;
     height: 35px;
-    font-size: 18px;
+    font-size: 20px;
     margin-top: 30px;
     border-radius: 10px;
     border: none;
     text-align: center;
-    /* background-color: rgb(24, 12, 94);
-    color: white; */
+
+    color: rgb(10, 6, 70);
 }
-input::placeholder{
+
+input::placeholder {
     text-align: center;
     font-size: 16px;
     letter-spacing: 2px;
     font-family: cursive;
-    /* color: whitesmoke; */
-
 }
 
-.submit, .skip{
+.submit,
+.skip,
+.restart, .start-button {
     width: 150px;
     height: 40px;
     font-size: 22px;
@@ -102,144 +143,288 @@ input::placeholder{
     box-shadow: 2px 2px 4px 1px black;
     text-shadow: 1px 1px 1px rgb(0, 0, 0);
     letter-spacing: 2px;
+
 }
-.submit:hover, .skip:hover{
+
+.restart {
+    background-color: rgb(153, 1, 1);
+    margin-top: 50px;
+}
+.start-button{
+    background-color: white;
+    color: rgb(22, 77, 22);
+}
+.start-button:hover{
+    background-color: rgb(22, 77, 22);
+    color: white;
+}
+
+.restart:hover {
+    background-color: rgb(22, 77, 22);
+    color: whitesmoke;
+}
+
+.submit:hover,
+.skip:hover,
+.restart:hover {
     filter: brightness(.9);
 }
-.submit:active, .skip:active{
+
+.submit:active,
+.skip:active,
+.restart:active, .start-button:active {
     transform: scale(.9);
 }
 
-.skip{
-    margin: 30px 0 30px 0;
+.skip {
+    margin: 10px 0 30px 0;
 }
 
-.congrat{
+.congrat {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     position: absolute;
-    width: 50vw;
-    top:50%;
-    left: 50%;
+    width: 45vw;
 
+    top: 50%;
+    left: 50%;
     letter-spacing: 2px;
     color: white;
-    font-size: 70px;
+
     transform: translate(-50%, -50%);
     background-color: rgb(231, 75, 18);
     border-radius: 15px;
     box-shadow: 2px 4px 8px 1px black;
 
-    transition: all 400ms ease-in-out ;
-    animation: celebration 3.5s linear ;
-    
-  
+    transition: all 400ms ease-in-out;
+    animation: celebration 3.5s linear;
+}
 
-}
-.congrat h1{
+.congrat h1 {
     font-size: 60px;
-    animation: congratulation 300ms ease infinite;
+    animation: TexttFlashing 300ms ease infinite;
     text-shadow: 1px 1px 1px rgb(0, 0, 0);
-    margin: 10px 0 0 0;
+    margin: 20px 0 0 0;
 }
-.congrat p:nth-of-type(1){
+
+.congrat p:nth-of-type(1) {
     font-size: 40px;
     color: rgb(255, 255, 255);
     text-shadow: 2px 2px 2px rgb(0, 0, 0);
     margin: 10px 0 0 0;
-    /* animation: congratulation 300ms ease infinite; */
 }
-.congrat p:nth-of-type(2){
+
+.congrat p:nth-of-type(2) {
     font-size: 40px;
     color: rgb(255, 255, 255);
     text-shadow: 2px 2px 2px rgb(0, 0, 0);
     margin: 10px 0 0 0;
-    /* animation: congratulation 300ms ease infinite; */
 }
-.congrat p:nth-of-type(2) span{
+
+.congrat p:nth-of-type(2) span {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 80px;
+    font-size: 60px;
     color: rgb(236, 4, 4);
     text-shadow: 1px 1px 1px rgb(255, 255, 255);
-    margin: 10px 0 0 0;
-    animation: congratulation 300ms ease infinite;
+    margin: 5px 0 0 0;
+    animation: TexttFlashing 300ms ease infinite;
 }
-/* .skip{
-    width: 150px;
-    height: 40px;
 
-    font-size: 20px;
-    color: whitesmoke;
-    background-color: rgb(47, 126, 47);
-    border-radius: 5px;
-    margin: 10px 0 20px 0;
-    cursor: pointer;
-    border: none;
-} */
+.gameOver {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    width: 55vw;
+    height: fit-content;
+    justify-content: center;
+    align-items: center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 1s ease-out;
+
+    animation: setGameOverAnime 1s ease-out;
+}
+
+.gameOver h1 {
+    color: white;
+    font-size: 120px;
+    text-shadow: 2px 2px 2px rgb(0, 0, 0);
+    letter-spacing: 2px;
+
+}
+
+.gameOver h1 span {
+    position: relative;
+    display: inline-flex;
+    animation: animeCrying 1.9s ease-in infinite;
+
+}
+
+@keyframes animeCrying {
+    0% {
+        top: 0;
+    }
+
+    20% {
+
+        top: -40px
+    }
+
+    40% {
+
+        top: 0
+    }
+
+    60% {
+
+        top: -100px
+    }
+
+    80% {
+
+        top: 0
+    }
+
+}
+
+@keyframes resumeGameOverAnime {
+    0% {
+        top: 50%;
+        left: 50%;
+    }
+
+    100% {
+        top: -150%;
+        left: 50%
+    }
+}
+
+@keyframes setGameOverAnime {
+    0% {
+        top: 150%;
+        left: 50%;
+    }
+
+    100% {
+        top: 50%;
+        left: 50%
+    }
+}
+@keyframes instructionEntrance {
+    0% {
+        top: 50%;
+        left: -150%;
+    }
+
+    100% {
+        top: 50%;
+        left: 50%
+    }
+}
+
+@keyframes resumeInstruction {
+    0% {
+        top: 50%;
+        left: 50%;
+    }
+
+    100% {
+        top: 50%;
+        left: 150%
+    }
+}
+
+@keyframes gameResetAnime {
+    0% {
+        width: 30%;
+        height: 30%;
+        top: 50%;
+        left: 50%;
+
+    }
+
+    100% {
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+
+    }
+
+}
 
 
-
-@keyframes congratulation{
-    0%{
+@keyframes TexttFlashing {
+    0% {
         color: blue
     }
-    20%{
+
+    20% {
         color: yellow
     }
-    40%{
+
+    40% {
         color: green
     }
-    60%{
+
+    60% {
         color: red
     }
-    80%{
+
+    80% {
         color: orangered
     }
-    
+
 }
-@keyframes celebration{
-    0%{
+
+@keyframes celebration {
+    0% {
         top: -50%;
         left: 50%;
 
     }
-    20%{
+
+    20% {
         top: 30%;
         left: 80%;
         transform: rotate(180deg);
     }
-    40%{
+
+    40% {
         top: 70%;
         left: 30%;
         transform: rotate(360deg);
 
     }
-    60%{
+
+    60% {
         top: 50%;
         left: 0%;
         transform: rotate(540deg);
     }
-    80%{
+
+    80% {
         top: 0%;
         right: 50%;
         transform: rotate(720deg);
-        /* transform: translateX(-50%); */
     }
 
 }
+
 @keyframes resumeCongratulation {
-    0%{
+    0% {
         top: 50%;
         left: 50%;
-        
     }
-    100%{
+
+    100% {
         top: -150%;
         left: 50%;
-        opacity: 0.7;
+        opacity: 0.2;
     }
 }
