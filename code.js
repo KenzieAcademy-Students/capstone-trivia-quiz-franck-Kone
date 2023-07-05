@@ -2,38 +2,44 @@
 // and select "Open with Live Server"
 
 // YOUR CODE HERE!
+
 const body = document.body
 body.textContent = ''
 
-//Create Nodes , variables and start game 
+//Create Nodes , and variables
 let score = 0
 let index = 0
 let instructionsInterval
+let displayDivTimeOut
+let answerTime = 45
+let answerTimeInterval
 
 const mainDiv = document.createElement('main'), 
 header = `<header><img src ="./image/kenzie.png" alt= logo>
 <h1 class="game-title">Trivia Quiz</h1><h2>Score:&nbsp<span class="score">0</span></h2></header>`, 
 gameBox = document.createElement('div'),
 questionText = document.createElement('h1'),
-userAnswer = document.createElement('input'),
+userInput = document.createElement('input'),
 submitButton = document.createElement('button'),
 congratDiv = document.createElement('div'),
 continueButton = document.createElement('button'),
 gameOverDiv = document.createElement('div'),
 resetButton = document.createElement('button'),
-gameOverElement = document.createElement('h1'),
+gameOverTitle = document.createElement('h1'),
 instructionDiv = document.createElement('div'),
-startGameButton = document.createElement('button')
+startGameButton = document.createElement('button'),
+instructions = "You will be shown questions that You can respond to and receive points for answering correctly.If you answer incorrectly, the score and game reset.",
+answerTimeLimit = document.createElement('h1')
 
-const instructions = "You will be shown questions that You can respond to and receive points for answering correctly.If you answer incorrectly, the score and game reset."
 
 //Set nodes content
 mainDiv.innerHTML = header
 submitButton.textContent = 'Submit'
 continueButton.innerHTML = 'Continue'
-gameOverElement.innerHTML += 'Game <span>😭</span>ver'
+gameOverTitle.innerHTML += 'Game <span>😭</span>ver'
 resetButton.innerHTML = 'Restart'
 startGameButton.textContent = 'Start'
+answerTimeLimit.innerHTML = 'Time : <span class="timeCount">45</span>'
 
 //Set classes and attributes
 gameBox.className = 'gameBox'
@@ -45,17 +51,18 @@ gameOverDiv.className = 'gameOver'
 resetButton.className = 'restart'
 instructionDiv.className = 'instruction-container'
 startGameButton.className = 'start-button'
+answerTimeLimit.className = 'time-display'
 
-userAnswer.setAttribute('placeholder', 'Please Enter Your Answer Here!')
-userAnswer.setAttribute('id', 'userAnswer')
-userAnswer.autofocus
-userAnswer.setAttribute('autocomplete', 'off')
+userInput.setAttribute('placeholder', 'Please Enter Your Answer Here!')
+userInput.setAttribute('id', 'userAnswer')
+userInput.autofocus
+userInput.setAttribute('autocomplete', 'off')
 
 //Insert nodes in their parents
-gameBox.append(questionText, userAnswer, submitButton)
+gameBox.append(answerTimeLimit,questionText, userInput, submitButton)
 mainDiv.append(gameBox)
 body.append(mainDiv, gameOverDiv)
-gameOverDiv.append(gameOverElement, resetButton)
+gameOverDiv.append(gameOverTitle, resetButton)
 
 //Fetching data query Q and A
 queryQandA()
@@ -72,10 +79,11 @@ async function queryQandA() {
     return data
 }
 
-// Instruction and start game 
-
+// Display instructions
 gameInstruction()
+
 function gameInstruction () {
+
     clearInterval(instructionsInterval)
     let instructionBody = `<h1>Hey! Do You Want to Check For Your IQ?</h1><h2>Instructions</h2><p>`
     const instructions = "You will be shown questions that You can respond to and receive points for answering correctly.If you answer incorrectly, the score and game reset."
@@ -97,49 +105,43 @@ function gameInstruction () {
     }
 }
 
-startGameButton.addEventListener('click', () => {
-    instructionDiv.style.display = 'none'
-    gameBox.style.display = 'flex'
-})
-
-//Update score
+//Update score if right answer and show up game over if wrong
 function updateQuestionAndScore(questionAndAnswerObject) {
+
     const question = questionAndAnswerObject.question
     const rightAnswer = questionAndAnswerObject.answer
-    console.log(rightAnswer)
     questionText.innerText = question
+    console.log(rightAnswer)
 
     submitButton.onclick = () => {
 
-        if (userAnswer.value.toLowerCase() === rightAnswer.toLowerCase()) {
+        if (userInput.value.toLowerCase() === rightAnswer.toLowerCase()) {
+            answerTime = 46
+            clearInterval(answerTimeInterval)
             score++
-            document.querySelector('.score').innerText = score
-            userAnswer.value = ''
+            userInput.value = ''
             mainDiv.style.filter = 'blur(8px)'
-            congratDiv.style.animation = "celebration 4s linear "
+            congratDiv.style.animation = "celebration 2.9s linear "
             gameBox.style.display ='none'
 
             congratulation()
+
+            //End game
         } else {
-            score = 0
-            mainDiv.style.display = 'none'
-            body.style.background = 'radial-gradient(closest-side, black, darkred, black)'
-            gameOverDiv.style.display = 'flex'
-            gameOverDiv.style.animation = "setGameOverAnime 1.5s ease-out"
-            userAnswer.value = ''
+            endGame()
         }
+        document.querySelector('.score').innerText = score
     }
 }
 
 //Celebration right answers
-let timeOut
 function congratulation() {
 
     congratDiv.style.display = 'flex'
     const congratMessage = `<h1>Bravooo...!</h1>\n<p>🥳Your score is Increasing🥳</p>\n<p>New Score:<span>${score}</span></p>`
     congratDiv.innerHTML = congratMessage
 
-    // continueButton functionality
+    // Continue to play after answering correctly a question, and pressing on continueButton 
     continueButton.addEventListener('click', () => {
 
         congratDiv.style.animation = "resumeCongratulation 2s linear"
@@ -147,35 +149,77 @@ function congratulation() {
 
         mainDiv.style.filter = 'blur(0)'
         
-        timeOut = setTimeout(() => {
+        displayDivTimeOut = setTimeout(() => {
             congratDiv.style.display = 'none'
 
         }, 1000)
 
         queryQandA()
+        timeCounter()
     })
 
     congratDiv.append(continueButton)
     body.append(congratDiv)
 }
 
-//End Game
+//Start Game
+startGameButton.addEventListener('click', () => {
+    instructionDiv.style.display = 'none'
+    gameBox.style.display = 'flex'
+    timeCounter()
+})
 
+//Reset Game
 resetButton.addEventListener('click', () => {
     gameOverDiv.style.animation = 'resumeGameOverAnime 2s ease-out'
+    answerTime = 46
 
-    // clearTimeout(timeOut)
     if (gameOverDiv.style.display === 'flex') {
 
-        timeOut = setTimeout(() => {
+        displayDivTimeOut = setTimeout(() => {
             gameOverDiv.style.display = 'none'
             mainDiv.style.animation = 'gameResetAnime 750ms linear'
             mainDiv.style.display = 'flex'
 
         }, 1000)
     }
+
+    queryQandA()
+    timeCounter()
+})
+
+// game answerTime counter
+function timeCounter () {
+    const timeCount = document.querySelector('.timeCount')
+
+    return (function recursive() {
+        clearInterval(answerTimeInterval) //
+
+        answerTime >= 30 ? timeCount.style.color = "darkblue" : answerTime >= 20 ? timeCount.style.color = "orange" : answerTime >= 10 ? timeCount.style.color = "yellow" : timeCount.style.color = "red" //
+
+        if (answerTime > 0) {
+            answerTimeInterval = setInterval(() => {
+                answerTime--
+                timeCount.innerText = answerTime
+                recursive()
+
+            }, 1000)
+        } else {
+            
+            document.querySelector('.timeCount').innerText = 0
+            endGame()
+        }
+    })()
+}
+
+// Game Over
+function endGame() {
     score = 0
     document.querySelector('.score').innerText = score
 
-    queryQandA()
-})
+    mainDiv.style.display = 'none'
+    body.style.background = 'radial-gradient(closest-side, black, darkred, black)'
+    gameOverDiv.style.display = 'flex'
+    gameOverDiv.style.animation = "setGameOverAnime 1.5s ease-out"
+    userInput.value = ''
+}
