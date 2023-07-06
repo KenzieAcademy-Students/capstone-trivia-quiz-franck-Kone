@@ -7,7 +7,7 @@
 body {
     height: 100vh;
     width: 100vw;
-overflow: hidden;
+    overflow: hidden;
 }
 
 main {
@@ -57,27 +57,27 @@ header h2 {
     color: rgb(238, 255, 0);
 }
 
-.instruction-container{
+.instruction-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     width: 55vw;
 }
 
-.instruction-container h1{
+.instruction-container h1 {
     font-size: 37px;
     color: rgb(255, 0, 0);
     text-shadow: 1px 1px 1px rgb(255, 255, 255);
 }
 
-.instruction-container h2{
+.instruction-container h2 {
     font-size: 34px;
     color: rgb(255, 255, 255);
     text-shadow: 1px 1px 1px rgb(255, 0, 0);
     margin: 20px 0;
 }
 
-.instruction-container p{
+.instruction-container p {
     font-size: 28px;
     color: rgb(0, 0, 0);
     text-shadow: 1px 1px 1px rgb(255, 255, 255);
@@ -99,8 +99,8 @@ header h2 {
     margin-top: 150px;
 }
 
-.time-display{
-    position:absolute;
+.time-display {
+    position: absolute;
     top: 140px;
     left: 50%;
     transform: translateX(-50%);
@@ -110,9 +110,10 @@ header h2 {
     border-radius: 15px;
     padding: 10px;
     box-shadow: 2px 4px 8px 1px black;
-    
+
 }
-.timeCount{
+
+.timeCount {
     color: darkblue;
 }
 
@@ -121,11 +122,11 @@ header h2 {
     color: rgb(94, 44, 12);
     font-size: 25px;
     text-shadow: 1px 1px 1px rgb(0, 0, 0);
-  
+
 }
 
 input {
-    width: 75%;
+    width: 90%;
     height: 35px;
     font-size: 20px;
     margin-top: 30px;
@@ -145,7 +146,8 @@ input::placeholder {
 
 .submit,
 .skip,
-.restart, .start-button {
+.restart,
+.start-button {
     width: 150px;
     height: 40px;
     font-size: 22px;
@@ -158,18 +160,19 @@ input::placeholder {
     box-shadow: 2px 2px 4px 1px black;
     text-shadow: 1px 1px 1px rgb(0, 0, 0);
     letter-spacing: 2px;
-
 }
 
 .restart {
     background-color: rgb(153, 1, 1);
     margin-top: 50px;
 }
-.start-button{
+
+.start-button {
     background-color: white;
     color: rgb(22, 77, 22);
 }
-.start-button:hover{
+
+.start-button:hover {
     background-color: rgb(22, 77, 22);
     color: white;
 }
@@ -187,7 +190,8 @@ input::placeholder {
 
 .submit:active,
 .skip:active,
-.restart:active, .start-button:active {
+.restart:active,
+.start-button:active {
     transform: scale(.9);
 }
 
@@ -439,18 +443,117 @@ input::placeholder {
     }
 }
 
-@media only screen and (max-width : 1360px) and (min-width: 698px){
-    /* .instruction-container {
-            width: 80vw;
-        } */
+@media only screen and (max-width : 1360px) and (min-width: 698px) {
+    
+    .gameOver h1 {
+        font-size: 75px;
+    }
 
-    .instruction-container h1{
-        font-size: 4vw;
+    .instruction-container {
+        width: 70vw;
     }
-    .instruction-container h2{
+
+    .instruction-container h1 {
+        font-size: 3vw;
+    }
+
+    .instruction-container h2 {
         font-size: 27px;
     }
-    .instruction-container p{
+
+    .instruction-container p {
         font-size: 27px;
+    }
+
+    .congrat p:nth-of-type(1) {
+        font-size: 40px;
+        text-align: center;
+    }
+
+    input {
+        width: 95%;
+    }
+
+    input::placeholder {
+
+        font-size: 15px;
+        letter-spacing: 1px;
+    }
+}
+
+@media only screen and (max-width : 713px) and (min-width: 150px) {
+
+    .game-title {
+
+        font-size: 30px;
+    }
+
+    .gameOver h1 {
+
+        font-size: 35px;
+    }
+
+    .submit,
+    .skip,
+    .restart,
+    .start-button {
+        width: 90px;
+        height: 30px;
+        font-size: 15px;
+    }
+
+    .time-display {
+        top: 150px;
+        padding: 5px;
+        font-size: 22px;
+    }
+
+    .question {
+
+        font-size: 18px;
+    }
+
+    input {
+        width: 95%;
+        height: 25px;
+        font-size: 16px;
+    }
+
+    input::placeholder {
+        text-align: center;
+        font-size: 9px;
+        letter-spacing: 1px;
+    }
+
+    .congrat {
+        width: 50vw;
+    }
+
+    .congrat h1 {
+        font-size: 35px;
+
+    }
+
+    .congrat p:nth-of-type(1),
+    .congrat p:nth-of-type(2) {
+        font-size: 25px;
+        text-align: center;
+    }
+
+    .congrat p:nth-of-type(2) span {
+        font-size: 35px;
+    }
+
+    .instruction-container {
+        width: 80vw;
+    }
+
+    .instruction-container h1 {
+        font-size: 3.5vw;
+    }
+
+    .instruction-container h2,
+    .instruction-container p {
+        font-size: 25px;
     }
 }
