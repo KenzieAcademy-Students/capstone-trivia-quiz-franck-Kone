@@ -4,7 +4,7 @@
 // YOUR CODE HERE!
 
 const body = document.body
-body.textContent = ''
+body.textContent = '';
 
 //Create Nodes , and variables
 let score = 0
@@ -12,24 +12,25 @@ let index = 0
 let instructionsInterval
 let displayDivTimeOut
 let answerTime = 45
-let answerTimeInterval
+let answerTimeInterval;
+let questionsByCategoryArray = []
 
-const mainDiv = document.createElement('main'), 
-header = `<header><img src ="./image/kenzie.png" alt= logo>
-<h1 class="game-title">Trivia Quiz</h1><h2>Score:&nbsp<span class="score">0</span></h2></header>`, 
-gameBox = document.createElement('div'),
-questionText = document.createElement('h1'),
-userInput = document.createElement('input'),
-submitButton = document.createElement('button'),
-congratDiv = document.createElement('div'),
-continueButton = document.createElement('button'),
-gameOverDiv = document.createElement('div'),
-resetButton = document.createElement('button'),
-gameOverTitle = document.createElement('h1'),
-instructionDiv = document.createElement('div'),
-startGameButton = document.createElement('button'),
-instructions = "You will be shown questions that You can respond to and receive points for answering correctly.If you answer incorrectly, the score and game reset.",
-answerTimeLimit = document.createElement('h1')
+const mainDiv = document.createElement('main'),
+    header = `<header><img src ="./image/kenzie.png" alt= logo>
+<h1 class="game-title">Trivia Quiz</h1><h2>Score:&nbsp<span class="score">0</span></h2></header>`,
+    gameBox = document.createElement('div'),
+    questionText = document.createElement('h1'),
+    userInput = document.createElement('input'),
+    submitButton = document.createElement('button'),
+    congratDiv = document.createElement('div'),
+    continueButton = document.createElement('button'),
+    gameOverDiv = document.createElement('div'),
+    resetButton = document.createElement('button'),
+    gameOverTitle = document.createElement('h1'),
+    instructionDiv = document.createElement('div'),
+    startGameButton = document.createElement('button'),
+    instructions = "You will be shown questions that You can respond to and receive points for answering correctly.If you answer incorrectly, the score and game reset.",
+    answerTimeLimit = document.createElement('h1')
 
 
 //Set nodes content
@@ -39,7 +40,7 @@ continueButton.innerHTML = 'Continue'
 gameOverTitle.innerHTML += 'Game <span>😭</span>ver'
 resetButton.innerHTML = 'Restart'
 startGameButton.textContent = 'Start'
-answerTimeLimit.innerHTML = 'Time : <span class="timeCount">45</span>'
+answerTimeLimit.innerHTML = 'Timer : <span class="timerCount">45</span>'
 
 //Set classes and attributes
 gameBox.className = 'gameBox'
@@ -51,7 +52,7 @@ gameOverDiv.className = 'gameOver'
 resetButton.className = 'restart'
 instructionDiv.className = 'instruction-container'
 startGameButton.className = 'start-button'
-answerTimeLimit.className = 'time-display'
+answerTimeLimit.className = 'timer-display'
 
 userInput.setAttribute('placeholder', 'Please Enter Your Answer Here!')
 userInput.setAttribute('id', 'userAnswer')
@@ -59,37 +60,22 @@ userInput.autofocus
 userInput.setAttribute('autocomplete', 'off')
 
 //Insert nodes in their parents
-gameBox.append(answerTimeLimit,questionText, userInput, submitButton)
+gameBox.append(answerTimeLimit, questionText, userInput, submitButton)
 mainDiv.append(gameBox)
 body.append(mainDiv, gameOverDiv)
 gameOverDiv.append(gameOverTitle, resetButton)
 
-//Fetching data query Q and A
-queryQandA()
-async function queryQandA() {
-
-    const data = await fetch('https://jservice.kenzie.academy/api/random-clue?valid=true')
-        .then(response => {
-            if (response.status !== 200) {
-                console.error('No data Fetched')
-            }
-            const responseIntoJson = response.json()
-            return responseIntoJson
-        }).then(result => updateQuestionAndScore(result))
-    return data
-}
-
 // Display instructions
 gameInstruction()
 
-function gameInstruction () {
+function gameInstruction() {
 
     clearInterval(instructionsInterval)
     let instructionBody = `<h1>Hey! Do You Want to Check For Your IQ?</h1><h2>Instructions</h2><p>`
     const instructions = "You will be shown questions that You can respond to and receive points for answering correctly.If you answer incorrectly, the score and game reset."
 
-    if(index < instructions.length) {
-        instructionBody += instructions.slice(0, index +1)
+    if (index < instructions.length) {
+        instructionBody += instructions.slice(0, index + 1)
         instructionBody += '</p>'
 
         instructionDiv.innerHTML = instructionBody
@@ -100,9 +86,56 @@ function gameInstruction () {
             gameInstruction()
         }, 100)
     }
-    if (index === instructions.length){
+    if (index === instructions.length) {
         instructionDiv.append(startGameButton)
     }
+}
+
+//Fetching data query Q and A
+
+queryQandA()
+async function queryQandA() {
+
+    await fetch('https://jservice.kenzie.academy/api/random-clue?valid=true').then(response => {
+
+        if (response.status !== 200) {
+
+            console.error('Data Not Fetched')
+        }
+
+        return response.json()
+
+    }).then(async (result) => {
+
+        const categoryId = result.categoryId
+
+        // console.log(categoryId)
+
+        return  await fetch(`https://jservice.kenzie.academy/api/clues?category=${categoryId}`).then(secondResponse => {
+
+            if (secondResponse.status !== 200) {
+                console.error('Data with this particular categoryId is NOT fetched')
+            }
+            return secondResponse.json()
+        }).then(secondResult => {
+
+        const randomCategory = Math.round(Math.random() * (secondResult.clues.length-1))
+
+            console.log(secondResult)
+            for( let clueIndex = 0; clueIndex < secondResult.clues.length; clueIndex++){
+                questionsByCategoryArray.push(secondResult.clues[clueIndex])
+                console.log(questionsByCategoryArray)
+            }
+            // if(questionsByCategoryArray.length < 100){
+            //     questionsByCategoryArray.push()
+
+            // }
+         
+            // console.log(secondResult.clues[randomCategory])
+        return updateQuestionAndScore(secondResult.clues[randomCategory])
+
+        })
+    })
 }
 
 //Update score if right answer and show up game over if wrong
@@ -122,7 +155,7 @@ function updateQuestionAndScore(questionAndAnswerObject) {
             userInput.value = ''
             mainDiv.style.filter = 'blur(8px)'
             congratDiv.style.animation = "celebration 2.9s linear "
-            gameBox.style.display ='none'
+            gameBox.style.display = 'none'
 
             congratulation()
 
@@ -148,14 +181,14 @@ function congratulation() {
         gameBox.style.display = 'flex'
 
         mainDiv.style.filter = 'blur(0)'
-        
+
         displayDivTimeOut = setTimeout(() => {
             congratDiv.style.display = 'none'
 
         }, 1000)
 
         queryQandA()
-        timeCounter()
+        timerCounter()
     })
 
     congratDiv.append(continueButton)
@@ -166,7 +199,7 @@ function congratulation() {
 startGameButton.addEventListener('click', () => {
     instructionDiv.style.display = 'none'
     gameBox.style.display = 'flex'
-    timeCounter()
+    timerCounter()
 })
 
 //Reset Game
@@ -185,28 +218,28 @@ resetButton.addEventListener('click', () => {
     }
 
     queryQandA()
-    timeCounter()
+    timerCounter()
 })
 
 // game answerTime counter
-function timeCounter () {
-    const timeCount = document.querySelector('.timeCount')
+function timerCounter() {
+    const timerCount = document.querySelector('.timerCount')
 
     return (function recursive() {
-        clearInterval(answerTimeInterval) //
+        clearInterval(answerTimeInterval)
 
-        answerTime >= 30 ? timeCount.style.color = "darkblue" : answerTime >= 20 ? timeCount.style.color = "orange" : answerTime >= 10 ? timeCount.style.color = "yellow" : timeCount.style.color = "red" //
+        answerTime >= 30 ? timerCount.style.color = "darkblue" : answerTime >= 20 ? timerCount.style.color = "orange" : answerTime >= 10 ? timerCount.style.color = "yellow" : timerCount.style.color = "red"
 
         if (answerTime > 0) {
             answerTimeInterval = setInterval(() => {
                 answerTime--
-                timeCount.innerText = answerTime
+                timerCount.innerText = answerTime
                 recursive()
 
             }, 1000)
         } else {
-            
-            document.querySelector('.timeCount').innerText = 0
+
+            document.querySelector('.timerCount').innerText = 0
             endGame()
         }
     })()

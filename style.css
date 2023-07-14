@@ -99,7 +99,7 @@ header h2 {
     margin-top: 150px;
 }
 
-.time-display {
+.timer-display {
     position: absolute;
     top: 140px;
     left: 50%;
@@ -113,7 +113,7 @@ header h2 {
 
 }
 
-.timeCount {
+.timerCount {
     color: darkblue;
 }
 
@@ -139,7 +139,7 @@ input {
 
 input::placeholder {
     text-align: center;
-    font-size: 16px;
+    font-size: 20px;
     letter-spacing: 2px;
     font-family: cursive;
 }
@@ -476,7 +476,7 @@ input::placeholder {
 
     input::placeholder {
 
-        font-size: 15px;
+        font-size: 18px;
         letter-spacing: 1px;
     }
 }
@@ -502,7 +502,7 @@ input::placeholder {
         font-size: 15px;
     }
 
-    .time-display {
+    .timer-display {
         top: 150px;
         padding: 5px;
         font-size: 22px;
