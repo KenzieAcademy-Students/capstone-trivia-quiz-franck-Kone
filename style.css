@@ -87,7 +87,6 @@ header h2 {
 
 .gameBox {
     width: 50%;
-    height: 50%;
     background-color: rgb(253, 199, 193);
     display: none;
     flex-direction: column;
@@ -308,7 +307,6 @@ input::placeholder {
 
         top: 0
     }
-
 }
 
 @keyframes resumeGameOverAnime {
@@ -401,7 +399,6 @@ input::placeholder {
     0% {
         top: -50%;
         left: 50%;
-
     }
 
     20% {
@@ -414,7 +411,6 @@ input::placeholder {
         top: 70%;
         left: 30%;
         transform: rotate(360deg);
-
     }
 
     60% {
@@ -531,7 +527,6 @@ input::placeholder {
 
     .congrat h1 {
         font-size: 35px;
-
     }
 
     .congrat p:nth-of-type(1),

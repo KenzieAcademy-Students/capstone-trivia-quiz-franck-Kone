@@ -92,7 +92,6 @@ function gameInstruction() {
 }
 
 //Fetching data query Q and A
-
 queryQandA()
 async function queryQandA() {
 
@@ -109,31 +108,30 @@ async function queryQandA() {
 
         const categoryId = result.categoryId
 
-        // console.log(categoryId)
-
-        return  await fetch(`https://jservice.kenzie.academy/api/clues?category=${categoryId}`).then(secondResponse => {
+        return await fetch(`https://jservice.kenzie.academy/api/clues?category=${categoryId}`).then(secondResponse => {
 
             if (secondResponse.status !== 200) {
-                console.error('Data with this particular categoryId is NOT fetched')
+                console.error('Data with this particular categoryId could not be fetched')
             }
             return secondResponse.json()
         }).then(secondResult => {
 
-        const randomCategory = Math.round(Math.random() * (secondResult.clues.length-1))
+            const randomCategory = Math.round(Math.random() * 99)
 
-            console.log(secondResult)
-            for( let clueIndex = 0; clueIndex < secondResult.clues.length; clueIndex++){
-                questionsByCategoryArray.push(secondResult.clues[clueIndex])
-                console.log(questionsByCategoryArray)
+            for (let clueIndex = 0; clueIndex < secondResult.clues.length; clueIndex++) {
+                if (questionsByCategoryArray.length < 100 && clueIndex !== secondResult.clues.length - 1) {
+                    questionsByCategoryArray.push(secondResult.clues[clueIndex])
+                }
+                if (questionsByCategoryArray.length < 100 && clueIndex === secondResult.clues.length - 1) {
+                    questionsByCategoryArray.push(secondResult.clues[clueIndex])
+                    queryQandA()
+                }
             }
-            // if(questionsByCategoryArray.length < 100){
-            //     questionsByCategoryArray.push()
 
-            // }
-         
-            // console.log(secondResult.clues[randomCategory])
-        return updateQuestionAndScore(secondResult.clues[randomCategory])
+            if (questionsByCategoryArray.length === 100) {
 
+                return updateQuestionAndScore(questionsByCategoryArray[randomCategory])
+            }
         })
     })
 }
@@ -142,8 +140,9 @@ async function queryQandA() {
 function updateQuestionAndScore(questionAndAnswerObject) {
 
     const question = questionAndAnswerObject.question
+    const categoryTitle = questionAndAnswerObject.category.title
     const rightAnswer = questionAndAnswerObject.answer
-    questionText.innerText = question
+    questionText.innerText = `CATEGORY: ${categoryTitle}\n\nQUESTION: ${question}`
     console.log(rightAnswer)
 
     submitButton.onclick = () => {
@@ -170,6 +169,8 @@ function updateQuestionAndScore(questionAndAnswerObject) {
 //Celebration right answers
 function congratulation() {
 
+    const randomCategory = Math.round(Math.random() * 99)
+
     congratDiv.style.display = 'flex'
     const congratMessage = `<h1>Bravooo...!</h1>\n<p>🥳Your score is Increasing🥳</p>\n<p>New Score:<span>${score}</span></p>`
     congratDiv.innerHTML = congratMessage
@@ -180,14 +181,14 @@ function congratulation() {
         congratDiv.style.animation = "resumeCongratulation 2s linear"
         gameBox.style.display = 'flex'
 
+        updateQuestionAndScore(questionsByCategoryArray[randomCategory])
+
         mainDiv.style.filter = 'blur(0)'
 
         displayDivTimeOut = setTimeout(() => {
             congratDiv.style.display = 'none'
-
         }, 1000)
 
-        queryQandA()
         timerCounter()
     })
 
@@ -199,6 +200,7 @@ function congratulation() {
 startGameButton.addEventListener('click', () => {
     instructionDiv.style.display = 'none'
     gameBox.style.display = 'flex'
+    // queryQandA()
     timerCounter()
 })
 
@@ -217,6 +219,7 @@ resetButton.addEventListener('click', () => {
         }, 1000)
     }
 
+    questionsByCategoryArray = []
     queryQandA()
     timerCounter()
 })
@@ -238,7 +241,6 @@ function timerCounter() {
 
             }, 1000)
         } else {
-
             document.querySelector('.timerCount').innerText = 0
             endGame()
         }
